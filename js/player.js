@@ -2,9 +2,10 @@ const Vector = require('./vector.js')
 
 module.exports =
 class Player {
-	constructor() {
+	constructor(socket) {
 		this.username = ''
 		this.id = ''
+		this.socket
 		this.position = new Vector()
 	}
 }

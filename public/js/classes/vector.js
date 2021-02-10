@@ -25,7 +25,7 @@ class Vector {
 			return this
 		}
 	}
-	plus(a) {
+	add(a) {
 		// if its another vector
 		if(a.x != undefined) {
 			this.x += a.x

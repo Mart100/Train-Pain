@@ -1,8 +1,8 @@
 
 class Player {
-	constructor() {
-		this.username = ''
-		this.id = ''
-		this.position = new Vector()
+	constructor(playerData) {
+		this.username = playerData.username
+		this.id = playerData.id
+		this.position = playerData.position
 	}
 }

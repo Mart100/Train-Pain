@@ -27,5 +27,5 @@ const io = Socket(server)
 
 // on player connect
 io.on('connection', async (socket) => {
-	socketReceiver(socket)
+	socketReceiver(socket, games)
 })
