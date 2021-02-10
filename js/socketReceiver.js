@@ -16,7 +16,8 @@ function socketReceiver(socket, games) {
 		// return success with gameData to client
 		let gameData = {
 			id: game.id,
-			players: []
+			players: [],
+			grid: game.grid
 		}
 		callback({status: 'SUCCESS', gameData})
 	})
@@ -44,7 +45,8 @@ function socketReceiver(socket, games) {
 		// return success with gameData to client
 		let gameData = {
 			id: game.id,
-			players: []
+			players: [],
+			grid: game.grid
 		}
 		callback({status: 'SUCCESS', gameData})
 	})
