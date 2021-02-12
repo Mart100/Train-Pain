@@ -15,8 +15,8 @@ function drawGrid() {
 
 			if(Math.random() > 0.9999) console.log(asset, object)
 			
-			ctx.fillStyle = 'rgb(255,255,255)'
-			ctx.fillRect(x*100, ch-(y*100), 100, 100)
+			//ctx.fillStyle = 'rgb(255,255,255)'
+			//ctx.fillRect(x*100, ch-(y*100), 100, 100)
 			ctx.drawImage(asset, x*100, ch-(y*100), 100, 100)
 
 
