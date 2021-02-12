@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "update": "git pull && npm install && pm2 restart TRAIN-PAIN && pm2 logs GOL-BOT --lines 50"
+    "update": "git pull && npm install && pm2 restart TRAIN-PAIN && pm2 logs TRAIN-PAIN --lines 50"
   },
   "author": "",
   "license": "ISC",
