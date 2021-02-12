@@ -34,7 +34,7 @@ class Game {
 	startProcess() {
 		this.processInterval = setInterval(() => {
 			tick(this)
-		}, 10)
+		}, 25)
 	}
 
 	spawnTrain() {
