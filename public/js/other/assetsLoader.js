@@ -9,7 +9,6 @@ let assets = {
       2: 'assets/tracks/2.png',
       3: 'assets/tracks/3.png',
       4: 'assets/tracks/4.png',
-      5: 'assets/tracks/5.png',
     },
     player: {
       right: 'assets/player/right.png',

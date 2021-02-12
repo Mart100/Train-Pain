@@ -17,7 +17,8 @@ function socketReceiver(socket, games) {
 		let gameData = {
 			id: game.id,
 			players: [],
-			grid: game.grid
+			grid: game.grid,
+			station: game.station
 		}
 		callback({status: 'SUCCESS', gameData})
 	})
@@ -46,7 +47,8 @@ function socketReceiver(socket, games) {
 		let gameData = {
 			id: game.id,
 			players: [],
-			grid: game.grid
+			grid: game.grid,
+			station: game.station
 		}
 		callback({status: 'SUCCESS', gameData})
 	})
@@ -91,22 +93,38 @@ function socketReceiver(socket, games) {
 		if(game == undefined) return callback({status: "GAME_ID_NOT_FOUND"})
 		let player = game.getPlayerByID(socket.id)
 
+		// get position of gridTile under player
 		let ppos = player.position
+		let gridPos = new Vector(Math.floor(ppos.x), Math.floor(ppos.y))
+
+		if(gridPos.x == game.grid.width) gridPos.x = game.grid.width-1
+		if(gridPos.y == game.grid.height) gridPos.y = game.grid.height-1
+
+		// if station location, return
+		console.log(game.station, gridPos)
+		if(game.station.clone().subtract(gridPos).getMagnitude() == 0) return callback({status: "STATION_IN_THE_WAY"})
 
 		// already holding something. Place track down
 		if(player.holding) {
 
 			let track = player.holding
 
-			// get new location of track
-			let newPos = new Vector(Math.floor(ppos.x), Math.floor(ppos.y))
-			track.position = newPos.clone()
+			track.position = gridPos.clone()
 
-			// if already a piece at that place, do nothing
-			if(game.grid.getTile(newPos.x, newPos.y) != 0) return callback({status: 'ALREADY_PIECE_ON_FLOOR'})
+			// if already a piece at that place, Switch
+			if(game.grid.getTile(gridPos.x, gridPos.y) != 0) {
+				let groundTile = game.grid.getTile(gridPos.x, gridPos.y)
+
+				player.holding = groundTile
+
+				game.grid.editTile(gridPos.x, gridPos.y, track)
+				game.sendGridData()
+
+				return
+			}
 
 			// put piece down
-			game.grid.editTile(newPos.x, newPos.y, track)
+			game.grid.editTile(gridPos.x, gridPos.y, track)
 			game.sendGridData()
 
 			// empty player holding
@@ -117,18 +135,17 @@ function socketReceiver(socket, games) {
 		// holding nothing. Pick track up
 		else {
 
-			let track = game.grid.getTile(Math.floor(ppos.x), Math.floor(ppos.y))
+			let track = game.grid.getTile(gridPos.x, gridPos.y)
 
 			// if no track at current position, do nothing
 			if(track == 0) return callback({status: 'NO_PIECE_ON_FLOOR'})
 
 			// remove stationary piece 
-			game.grid.editTile(Math.floor(ppos.x), Math.floor(ppos.y), 0)
+			game.grid.editTile(gridPos.x, gridPos.y, 0)
 			game.sendGridData()
 
 			// put in players holding
 			player.holding = track
-			console.log(track, ppos.x, ppos.y)
 
 		}
 

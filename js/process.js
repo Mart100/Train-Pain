@@ -17,6 +17,16 @@ function tick(game) {
 	// send players
 	for(let player of game.players) {
 
+		// send players
 		player.socket.emit('players', {players: filteredPlayers4Client, status: 'SUCCESS'})
+		
+	}
+
+	// send trains
+	game.sendTrainData()
+
+	// update train position
+	for(let train of game.trains) {
+		train.move(train.speed)
 	}
 }

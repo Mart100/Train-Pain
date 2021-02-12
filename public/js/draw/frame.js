@@ -13,4 +13,11 @@ function frame() {
 		drawPlayer(player)
 		drawHoldingTrack(player)
 	}
+
+	if(game.trains) {
+		for(let train of game.trains) {
+			drawTrain(train)
+		}
+	}
+
 }
