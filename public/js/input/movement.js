@@ -18,6 +18,8 @@ function movementTick() {
 
 	// moved
 	if(movement.getMagnitude() > 0) {
-		socket.emit('PLAYER_MOVEMENT', {movement, gameID: game.id})
+		socket.emit('PLAYER_MOVEMENT', {movement, gameID: game.id}, (response) => {
+			if(response.status != 'SUCCESS') console.log(response.status, response.position)
+		})
 	}
 }

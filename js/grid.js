@@ -15,7 +15,13 @@ class Grid {
 	}
 
 	editTile(x, y, track) {
+		if(this.data[x] == undefined) return
 		this.data[x][y] = track
+	}
+
+	getTile(x, y) {
+		if(this.data[x] == undefined) return
+		return this.data[x][y]
 	}
 
 	createEmtpyGridData(width, height) {

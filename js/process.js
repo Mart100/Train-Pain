@@ -1,9 +1,6 @@
 module.exports = 
 function tick(game) {
 
-
-
-
 	// get filtered players
 	let filteredPlayers4Client = []
 	for(let player of game.players) {
@@ -11,7 +8,8 @@ function tick(game) {
 		let playerObj4Client = {
 			username: player.username,
 			id: player.id,
-			position: player.position
+			position: player.position,
+			holding: player.holding
 		}
 		filteredPlayers4Client.push(playerObj4Client)
 	}

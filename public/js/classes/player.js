@@ -4,5 +4,6 @@ class Player {
 		this.username = playerData.username
 		this.id = playerData.id
 		this.position = playerData.position
+		this.holding = playerData.holding
 	}
 }

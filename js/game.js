@@ -46,6 +46,8 @@ class Game {
 
 		if(this.players.includes(player)) return console.log('PLAYER ALREADY INSIDE GAME')
 
+		player.position = new Vector(this.grid.width/2, this.grid.height/2)
+
 		this.players.push(player)
 
 		this.sendGridData()

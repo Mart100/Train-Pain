@@ -9,5 +9,8 @@ function frame() {
 	drawGridLines()
 	drawGrid()
 
-	for(let player of game.players) drawPlayer(player)
+	for(let player of game.players) {
+		drawPlayer(player)
+		drawHoldingTrack(player)
+	}
 }

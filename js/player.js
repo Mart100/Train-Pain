@@ -7,5 +7,6 @@ class Player {
 		this.id = ''
 		this.socket
 		this.position = new Vector()
+		this.holding = 0 // Track
 	}
 }
