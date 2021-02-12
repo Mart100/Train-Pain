@@ -20,7 +20,7 @@ $(() => {
 				// start game
 				startGame()
 
-				console.log('YEEE', game)
+				//console.log('YEEE', game)
 			}
 			
 			// something went wrong...

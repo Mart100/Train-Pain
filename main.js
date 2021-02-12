@@ -18,7 +18,7 @@ app.use('/', express.static('public'))
 app.use('/:id', express.static('public'))
 
 // listen on port :)
-const server = app.listen(process.env.PORT || 3333, () => {
+const server = app.listen(process.env.PORT || 25565, () => { // 3333
   console.log('Your app is listening on port ' + server.address().port)
 })
 

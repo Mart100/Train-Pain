@@ -84,7 +84,7 @@ function socketReceiver(socket, games) {
 
 	socket.on('PICKUP_OR_PLACE_TRACK', (data, callback) => {
 
-		console.log(data)
+		//console.log(data)
 
 		let gameID = data.gameID
 
@@ -101,7 +101,7 @@ function socketReceiver(socket, games) {
 		if(gridPos.y == game.grid.height) gridPos.y = game.grid.height-1
 
 		// if station location, return
-		console.log(game.station, gridPos)
+		//console.log(game.station, gridPos)
 		if(game.station.clone().subtract(gridPos).getMagnitude() == 0) return callback({status: "STATION_IN_THE_WAY"})
 
 		// already holding something. Place track down

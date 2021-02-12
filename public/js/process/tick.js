@@ -3,7 +3,7 @@ let processInterval
 function startProcess() {
 	processInterval = setInterval(() => {
 		tick()
-	}, 10)
+	}, 25)
 }
 
 function tick() {

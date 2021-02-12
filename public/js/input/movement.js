@@ -1,5 +1,5 @@
 function movementTick() {
-	let speed = 0.05 //(settings.playerSpeed/150)*(world.deltaTick/10)
+	let speed = 0.1 //(settings.playerSpeed/150)*(world.deltaTick/10)
 
 	let movement = new Vector(0, 0)
 
