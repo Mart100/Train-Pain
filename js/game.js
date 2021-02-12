@@ -11,7 +11,7 @@ class Game {
 	constructor(id, settings) {
 		this.id = id
 		this.players = []
-		this.grid = new Grid(20, 20)
+		this.grid = new Grid(12, 8)
 
 		this.start()
 	}
@@ -19,7 +19,7 @@ class Game {
 	start() {
 		this.startProcess()
 
-		this.addRandomTracks(10)
+		this.addRandomTracks(50)
 	}
 
 	startProcess() {
