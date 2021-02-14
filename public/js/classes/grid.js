@@ -8,4 +8,8 @@ class Grid {
 		else this.height = 0
 
 	}
+	getTile(x, y) {
+		if(this.data[x] == undefined) return
+		return this.data[x][y]
+	}
 }
