@@ -20,4 +20,10 @@ function frame() {
 		}
 	}
 
+	if(game.powerups) {
+		for(let powerup of game.powerups) {
+			drawPowerup(powerup)
+		}
+	}
+
 }

@@ -3,6 +3,8 @@ class Train {
 		this.position = new Vector(trainData.position.x, trainData.position.y)
 		this.trackProgression = trainData.trackProgression
 		this.previousPosition = new Vector(trainData.previousPosition.x, trainData.previousPosition.y)
+		this.id = trainData.id
+		this.speeding = trainData.speeding
 	}
 	getNextTilePos(grid) {
 		// get current track
@@ -72,7 +74,7 @@ class Train {
 		}
 
 		if(!nextTilePos) return
-		return new Vector(Math.floor(nextTilePos.x), Math.floor(nextTilePos.y))
+		return new Vector(Math.round(nextTilePos.x), Math.round(nextTilePos.y))
 	}
 	getNextTile(grid) {
 		let nextTilePos = this.getNextTilePos(grid)

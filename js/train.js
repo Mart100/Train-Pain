@@ -1,4 +1,5 @@
 const Vector = require('./vector.js')
+const utils = require('./utils.js')
 
 module.exports =
 class Train {
@@ -6,8 +7,10 @@ class Train {
 		this.position = startPosition.clone()
 		this.previousPosition = startPosition.clone().subtract(new Vector(1, 0))
 		this.trackProgression = 0 // 0 - 100
-		this.speed = 0.5
+		this.speed = 0.0
 		this.game = game
+		this.speeding = false
+		this.id = utils.randomToken(5)
 	}
 	getNextTile(grid) {
 		// get current track
@@ -29,8 +32,11 @@ class Train {
 
 			let straight = straights[track.rotation]
 
-			if(opposite.clone().subtract(straight[0]).getMagnitude() == 0) nextTilePos = this.position.clone().add(straight[1].rotate(Math.PI))
-			else if(opposite.clone().subtract(straight[1]).getMagnitude() == 0) nextTilePos = this.position.clone().add(straight[0].rotate(Math.PI))
+			console.log(opposite, straight,)
+
+			if(opposite.isIdentical(straight[0])) nextTilePos = this.position.clone().add(straight[1].rotate(Math.PI))
+			else if(opposite.isIdentical(straight[1])) nextTilePos = this.position.clone().add(straight[0].rotate(Math.PI))
+			else return
 
 		}
 
@@ -78,13 +84,16 @@ class Train {
 
 		if(nextTilePos == undefined) return
 
-		let nextTile = grid.getTile(Math.floor(nextTilePos.x), Math.floor(nextTilePos.y))
+		let nextTile = grid.getTile(Math.round(nextTilePos.x), Math.round(nextTilePos.y))
 		return nextTile
 	}
 	move() {
 		this.trackProgression += this.speed
 
-		let previousPosition = new Vector(Math.round(this.position.x), Math.round(this.position.y))
+		// if speeding, apply speed again
+		if(this.speeding) this.trackProgression += this.speed
+
+		let previousPosition1 = new Vector(Math.round(this.position.x), Math.round(this.position.y))
 
 		// move to next tile
 		if(this.trackProgression > 100) {
@@ -98,17 +107,18 @@ class Train {
 			let nextTile = this.getNextTile(this.game.grid)
 
 			if(nextTile != 0 && nextTile != undefined) {
-				console.log(nextTile)
-				this.previousPosition = previousPosition.clone()
+				//console.log(nextTile)
+				this.previousPosition = previousPosition1.clone()
 				this.position = new Vector(Math.round(nextTile.position.x), Math.round(nextTile.position.y))
-				console.log(this.position, this.previousPosition)
+				//console.log(this.position, this.previousPosition)
 				this.trackProgression = 0
 			} 
 			
 			// crashed
 			else {
 				this.trackProgression = 100
-				return
+				let idx = this.game.trains.indexOf(this)
+				this.game.trains.splice(idx, 1)
 			}
 			
 			/*// set previous Position if moved

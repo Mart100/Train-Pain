@@ -2,6 +2,7 @@ let canvas, ctx
 let selfPlayer
 let game
 let keys = {}
+let mousePos = new Vector(0, 0)
 
 
 $(() => {

@@ -1,5 +1,27 @@
 function drawTrain(train) {
 
+	let pos = getPreciseTrainPositionOnScreen(train)
+
+	if(!pos) return
+
+
+	ctx.fillStyle = 'rgb(0, 0, 255)'
+	ctx.beginPath()
+	ctx.arc(pos.x, pos.y, 10, 0, 2*Math.PI)
+	ctx.fill()
+
+	// if train is speeding
+	if(train.speeding) {
+		ctx.fillStyle = 'rgb(255, 255, 0)'
+		ctx.beginPath()
+		ctx.arc(pos.x, pos.y, 4, 0, 2*Math.PI)
+		ctx.fill()
+	}
+
+}
+
+function getPreciseTrainPositionOnScreen(train) {
+
 	let ch = canvas.height
 	let cw = canvas.width
 	let grid = game.grid
@@ -35,44 +57,59 @@ function drawTrain(train) {
 	}
 
 	// corner rail
-	if(track.type == 2) {
+	if(track.type == 2 || track.type == 4) {
 
-		let nextTilePos = train.getNextTilePos(game.grid)
-		//console.log(nextTilePos)
-		if(!nextTilePos) return
 		let previousTile = train.previousPosition
 
+		let nextTilePos = train.getNextTilePos(game.grid)
+		if(!nextTilePos) return
+
+		let exitDirection = nextTilePos.clone().subtract(train.position)
+		let entryDirection = train.position.clone().subtract(previousTile)
+
+
 		let angle = ((train.trackProgression/100)*90)*(Math.PI/180)
-
-		let vec1 = nextTilePos.clone().subtract(previousTile)
-		let clockwiseTurn = Math.atan2(vec1.x, vec1.y) < Math.PI/2
-		if(Math.random() > 0.9) console.log(clockwiseTurn)
-
 		let curve = new Vector(Math.sin(angle)*50, Math.cos(angle)*50)
 
-		if(clockwiseTurn) {
-			//curve.rotate(Math.PI/2)
+		let curveOptions = [
+			/*[ entry_direction exit_direction          curve_x  curve_y ]*/
+			
+			[ new Vector(1, 0), new Vector(0, -1), curve.x, curve.y ],
+			[ new Vector(1, 0), new Vector(0, 1), curve.x, 100+(curve.y*-1) ],
+
+			[ new Vector(0, 1), new Vector(-1, 0), curve.x, curve.y, true ],
+			[ new Vector(0, 1), new Vector(1, 0), curve.x, 100+(curve.y*-1), true ],
+
+			[ new Vector(0, -1), new Vector(-1, 0), 100+(curve.x*-1), curve.y, true  ],
+			[ new Vector(0, -1), new Vector(1, 0), 100+(curve.x*-1), 100+(curve.y*-1), true ],
+
+			[ new Vector(-1, 0), new Vector(0, -1), 100+(curve.x*-1), curve.y ],
+			[ new Vector(-1, 0), new Vector(0, 1), 100+(curve.x*-1), 100+(curve.y*-1) ],
+		]
+
+		let curveFound = false
+
+		for(let possibleCurve of curveOptions) {
+
+			if(curveFound) continue
+
+			if(!possibleCurve[0].isIdentical(entryDirection)) continue
+			if(!possibleCurve[1].isIdentical(exitDirection)) continue
+
+			if(possibleCurve[4]) {
+				posX += possibleCurve[3]
+				posY += possibleCurve[2]
+			} else {
+				posX += possibleCurve[2]
+				posY += possibleCurve[3]
+			}
+
+			curveFound = possibleCurve
+
+			break
+
 		}
 
-		let curveAngle = train.position.clone().subtract(nextTilePos).getAngle()+90
-		curve.rotate(curveAngle*(Math.PI/180))
-
-		curve.x = Math.abs(curve.x)
-		curve.y = Math.abs(curve.y)
-
-		if(clockwiseTurn) {
-			posY += 100-curve.y
-			posX += curve.x
-		} else {
-			posY += curve.y
-			posX += curve.x
-		}
-
-
-
-
-
-		if(Math.random() > 0.9) console.log(curve, angle, curveAngle, posY, posX)
 	}
 
 	// cross rail
@@ -96,8 +133,5 @@ function drawTrain(train) {
 		}
 	}
 
-
-	ctx.arc(posX, posY, 10, 0, 2*Math.PI)
-	ctx.fill()
-
+	return {x: posX, y: posY}
 }

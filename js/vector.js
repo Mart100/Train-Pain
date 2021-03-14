@@ -105,6 +105,9 @@ class Vector {
 		let magnitude = Math.sqrt(this.x*this.x + this.y*this.y)
 		return magnitude
 	}
+	isIdentical(vec1) {
+		return this.clone().subtract(vec1).getMagnitude() == 0
+	}
 	dotProduct(vec1) {
 		return this.x*vec1.x + this.y*vec1.y
 	}

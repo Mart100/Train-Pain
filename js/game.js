@@ -3,6 +3,7 @@ const Player = require('./player.js')
 const Grid = require('./grid.js')
 const Track = require('./track.js')
 const Train = require('./train.js')
+const Powerup = require('./powerup.js')
 
 const tick = require('./process.js')
 
@@ -15,6 +16,11 @@ class Game {
 		this.grid = new Grid(12, 8)
 		this.station = new Vector(0, 3)
 		this.trains = []
+		this.powerups = []
+		this.score = 0
+
+		this.newTrainInterval = 40*1000
+		this.trainSpeed = 0.3
 
 		this.start()
 	}
@@ -28,27 +34,61 @@ class Game {
 		// spawn first train
 		this.spawnTrain()
 
-		this.addRandomTracks(50)
+		// add powerups
+		
+		for(let i=0;i<4;i++) this.powerups.push(new Powerup('random', 'rail', this))
+		for(let i=0;i<4;i++) this.powerups.push(new Powerup('random', 'score', this))
+
+		this.addRandomTracks(20)
 	}
 
 	startProcess() {
-		this.processInterval = setInterval(() => {
+		this.processIntervalFunction = setInterval(() => {
 			tick(this)
 		}, 25)
+
+		this.newTrainIntervalFunction = setInterval(() => {
+			this.spawnTrain()
+		}, this.newTrainInterval)
 	}
 
 	spawnTrain() {
 
 		let train = new Train(this.station, this)
+		train.speed = this.trainSpeed
 
 		this.trains.push(train)
 
 	}
 
-	addRandomTracks(amount) {
+	addRandomTracks(amount, spawnPos) {
 
 		for(let i=0; i<amount; i++) {
 			let position = new Vector(Math.floor(Math.random()*this.grid.width), Math.floor(Math.random()*this.grid.height))
+
+			if(spawnPos) {
+				let closerPos = position.clone()
+				let newPos = 0
+				while(newPos == 0) {
+					let direction = position.clone().subtract(spawnPos).setMagnitude(1)
+					let directionBlock = new Vector(Math.round(direction.x), Math.round(direction.y))
+					let closererPos = closerPos.clone().add(directionBlock)
+
+					let groundTile = this.grid.getTile(closererPos.x, closererPos.y)
+
+					if(groundTile != 0) { // occupied tile
+						newPos = closerPos.clone()
+					}
+
+					else {
+						closerPos = closererPos
+					}
+
+
+				}
+
+			}
+
 			let rotation
 			let type = Math.floor(Math.random()*4)+1
 
@@ -83,6 +123,7 @@ class Game {
 		this.players.push(player)
 
 		this.sendGridData()
+		this.sendPowerupData()
 
 	}
 
@@ -106,13 +147,23 @@ class Game {
 			trains.push({
 				position: train.position,
 				previousPosition: train.previousPosition,
-				trackProgression: train.trackProgression
+				trackProgression: train.trackProgression,
+				id: train.id,
+				speeding: train.speeding
 			})
 		}
 
 		// send players
 		for(let player of this.players) {
 			player.socket.emit('trains', {trains: trains, status: 'SUCCESS'})
+		}
+	}
+
+	sendPowerupData() {
+
+		// send players
+		for(let player of this.players) {
+			player.socket.emit('powerups', {powerups: this.powerups, status: 'SUCCESS'})
 		}
 	}
 }

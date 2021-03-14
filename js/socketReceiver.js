@@ -82,6 +82,24 @@ function socketReceiver(socket, games) {
 
 	})
 
+	socket.on('TRIGGER_TRAIN', (data, callback) => {
+
+		let gameID = data.gameID
+
+		// find player in game
+		let game = games.find(g => g.id == gameID)
+		if(game == undefined) return callback({status: "GAME_ID_NOT_FOUND"})
+		let player = game.getPlayerByID(socket.id)
+
+		// find train
+		let trainID = data.trainID
+		let train = game.trains.find(t => t.id == trainID)
+
+		if(train.speeding) train.speeding = false
+		else train.speeding = true
+
+	})
+
 	socket.on('PICKUP_OR_PLACE_TRACK', (data, callback) => {
 
 		//console.log(data)
@@ -113,6 +131,14 @@ function socketReceiver(socket, games) {
 
 			// if already a piece at that place, Switch
 			if(game.grid.getTile(gridPos.x, gridPos.y) != 0) {
+
+				// Unless train is already on that piece
+				let trainOnRail = false
+				for(let train of game.trains) {
+					if(train.position.isIdentical(new Vector(gridPos.x, gridPos.y))) trainOnRail = true
+				}
+				if(trainOnRail) return callback({status: 'TRAIN_ON_RAIL'})
+
 				let groundTile = game.grid.getTile(gridPos.x, gridPos.y)
 
 				player.holding = groundTile
@@ -139,6 +165,13 @@ function socketReceiver(socket, games) {
 
 			// if no track at current position, do nothing
 			if(track == 0) return callback({status: 'NO_PIECE_ON_FLOOR'})
+
+			// check if train is on rail
+			let trainOnRail = false
+			for(let train of game.trains) {
+				if(train.position.isIdentical(new Vector(gridPos.x, gridPos.y))) trainOnRail = true
+			}
+			if(trainOnRail) return callback({status: 'TRAIN_ON_RAIL'})
 
 			// remove stationary piece 
 			game.grid.editTile(gridPos.x, gridPos.y, 0)

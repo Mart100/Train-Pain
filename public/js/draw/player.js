@@ -1,5 +1,14 @@
 function drawPlayer(player) {
 
+	let pos = this.getPlayerScreenPosition(player)
+
+	ctx.arc(pos.x, pos.y, 10, 0, 2*Math.PI)
+	ctx.fill()
+
+}
+
+function getPlayerScreenPosition(player) {
+
 	let ch = canvas.height
 	let cw = canvas.width
 	let grid = game.grid
@@ -14,10 +23,8 @@ function drawPlayer(player) {
 	ctx.fillStyle = 'rgb(255, 0, 0)'
 	ctx.beginPath()
 
-	let poxX = ppos.x*100 + leftoverWidth/2
+	let posX = ppos.x*100 + leftoverWidth/2
 	let posY = ppos.y*100 + leftoverHeight/2
 
-	ctx.arc(poxX, posY, 10, 0, 2*Math.PI)
-	ctx.fill()
-
+	return new Vector(posX, posY)
 }

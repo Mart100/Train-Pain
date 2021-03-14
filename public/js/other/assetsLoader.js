@@ -4,6 +4,10 @@ let assets = {
       grass1: 'assets/ground/grass1.png',
       grass2: 'assets/ground/grass2.png',
     },
+    powerups: {
+      rail: 'assets/powerups/rail.png',
+      score: 'assets/powerups/score.png'
+    },
     tracks: {
       1: 'assets/tracks/1.png',
       2: 'assets/tracks/2.png',

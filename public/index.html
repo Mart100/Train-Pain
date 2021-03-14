@@ -30,6 +30,7 @@
 		<script src="./js/classes/grid.js"></script>
 		<script src="./js/classes/track.js"></script>
 		<script src="./js/classes/train.js"></script>
+		<script src="./js/classes/powerup.js"></script>
     <script src="./js/main.js"></script>
 		<script src="./js/menu/newGame.js"></script>
 		<script src="./js/menu/joinGame.js"></script>
@@ -39,6 +40,7 @@
 		<script src="./js/draw/player.js"></script>
 		<script src="./js/draw/holding.js"></script>
 		<script src="./js/draw/train.js"></script>
+		<script src="./js/draw/powerup.js"></script>
 		<script src="./js/input/keys.js"></script>
 		<script src="./js/input/movement.js"></script>
 		<script src="./js/input/mouse.js"></script>
@@ -46,12 +48,13 @@
 		<script src="./js/sockets/playerUpdates.js"></script>
 		<script src="./js/sockets/gridUpdate.js"></script>
 		<script src="./js/sockets/trainsUpdate.js"></script>
+		<script src="./js/sockets/powerupsUpdate.js"></script>
 		<script src="./js/other/assetsLoader.js"></script>
 
 
   </head>
   <body id="body">
-		<canvas id="canvas" style="display: none;"></canvas>
+		<canvas id="canvas" style="display: none;" oncontextmenu="return false;"></canvas>
     <div id="menu">
 			Username: <input type="text" class="username">
 			<br><br>

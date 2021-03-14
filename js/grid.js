@@ -1,3 +1,5 @@
+const Vector = require('./vector.js')
+
 module.exports = 
 class Grid {
 	constructor(width, height) {
@@ -22,6 +24,12 @@ class Grid {
 	getTile(x, y) {
 		if(this.data[x] == undefined) return
 		return this.data[x][y]
+	}
+
+	randomTile() {
+		let pos = new Vector(Math.floor(Math.random()*this.width), Math.floor(Math.random()*this.height))
+		let rail = this.getTile(pos.x, pos.y)
+		return {pos, rail}
 	}
 
 	createEmtpyGridData(width, height) {

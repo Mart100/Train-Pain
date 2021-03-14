@@ -108,6 +108,11 @@ class Vector {
 	clone() {
 		return new Vector(this.x, this.y)
 	}
+	isIdentical(vec1) {
+
+		return this.clone().subtract(vec1).getMagnitude() == 0
+		
+	}
 	randomize(i) {
 		this.x = (Math.random()*i)-i/2
 		this.y = (Math.random()*i)-i/2

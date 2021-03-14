@@ -29,4 +29,9 @@ function tick(game) {
 	for(let train of game.trains) {
 		train.move(train.speed)
 	}
+
+	// check powerups
+	for(let powerup of game.powerups) {
+		powerup.checkTaken(game)
+	}
 }
